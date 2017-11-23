@@ -13,7 +13,17 @@ int main()
 {
 	// Create the main window
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
-
+	sf::RectangleShape playerRectangle;
+	sf::RectangleShape mouseRectangle;
+	playerRectangle.setPosition(0.0f, 0.0f);
+	playerRectangle.setSize(sf::Vector2f(88.5f, 88.5f));
+	playerRectangle.setOutlineThickness(4.0f);
+	playerRectangle.setFillColor(sf::Color::Transparent);
+	mouseRectangle.setSize(sf::Vector2f(88.5f, 88.5f));
+	mouseRectangle.setOutlineThickness(4.0f);
+	mouseRectangle.setFillColor(sf::Color::Transparent);
+	mouseRectangle.setOutlineColor(sf::Color::Green);
+	playerRectangle.setOutlineColor(sf::Color::Green);
 	// Load a sprite to display
 	sf::Texture sprite_sheet;
 	if (!sprite_sheet.loadFromFile("assets\\grid.png")) {
@@ -65,7 +75,7 @@ int main()
 	{
 		// Move Sprite Follow Mouse
 		mouse.setPosition(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
-
+		mouseRectangle.setPosition(mouse.getPosition().x, mouse.getPosition().y);
 		// Update mouse AABB
 		aabb_mouse.min = c2V(mouse.getPosition().x, mouse.getPosition().y);
 		aabb_mouse.max = c2V(mouse.getGlobalBounds().width, mouse.getGlobalBounds().width);
@@ -109,11 +119,15 @@ int main()
 		// Check for collisions
 		result = c2AABBtoAABB(aabb_mouse, aabb_player);
 		cout << ((result != 0) ? ("Collision") : "") << endl;
-		if (result){
-			player.getAnimatedSprite().setColor(sf::Color(255,0,0));
+		if (result)
+		{
+			mouseRectangle.setOutlineColor(sf::Color::Red);
+			playerRectangle.setOutlineColor(sf::Color::Red);
 		}
-		else {
-			player.getAnimatedSprite().setColor(sf::Color(0, 255, 0));
+		else 
+		{
+			mouseRectangle.setOutlineColor(sf::Color::Green);
+			playerRectangle.setOutlineColor(sf::Color::Green);
 		}
 
 		// Clear screen
@@ -122,7 +136,8 @@ int main()
 		// Draw the Players Current Animated Sprite
 		window.draw(player.getAnimatedSprite());
 		window.draw(mouse);
-
+		window.draw(playerRectangle);
+		window.draw(mouseRectangle);
 		// Update the window
 		window.display();
 	}
