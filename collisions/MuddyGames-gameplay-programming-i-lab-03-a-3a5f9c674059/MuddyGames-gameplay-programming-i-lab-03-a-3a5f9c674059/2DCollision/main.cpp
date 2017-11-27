@@ -15,6 +15,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 	sf::RectangleShape playerRectangle;
 	sf::RectangleShape mouseRectangle;
+	sf::CircleShape circle;
 	playerRectangle.setPosition(0.0f, 0.0f);
 	playerRectangle.setSize(sf::Vector2f(88.5f, 88.5f));
 	playerRectangle.setOutlineThickness(4.0f);
@@ -24,6 +25,9 @@ int main()
 	mouseRectangle.setFillColor(sf::Color::Transparent);
 	mouseRectangle.setOutlineColor(sf::Color::Green);
 	playerRectangle.setOutlineColor(sf::Color::Green);
+	circle.setPosition(700.0f, 0.0f);
+	circle.setRadius(50);
+	circle.setFillColor(sf::Color::Yellow);
 	// Load a sprite to display
 	sf::Texture sprite_sheet;
 	if (!sprite_sheet.loadFromFile("assets\\grid.png")) {
@@ -61,14 +65,20 @@ int main()
 	aabb_player.min = c2V(animated_sprite.getPosition().x, animated_sprite.getPosition().y);
 	aabb_player.max = c2V(animated_sprite.getGlobalBounds().width / animated_sprite.getFrames().size(), 
 		animated_sprite.getGlobalBounds().height / animated_sprite.getFrames().size());
-
+	
+	
+	//setup circle collider
+	c2Circle c2circle_collider;
+	c2circle_collider.p = c2V(750, 50);
+	c2circle_collider.r = 50;
 
 	// Setup the Player
 	Player player(animated_sprite);
 	Input input;
 
 	// Collision result
-	int result = 0;
+	int AABBresult = 0;
+	int Circleresult = 0;
 	
 	// Start the game loop
 	while (window.isOpen())
@@ -117,9 +127,11 @@ int main()
 		player.update();
 
 		// Check for collisions
-		result = c2AABBtoAABB(aabb_mouse, aabb_player);
-		cout << ((result != 0) ? ("Collision") : "") << endl;
-		if (result)
+		AABBresult = c2AABBtoAABB(aabb_mouse, aabb_player);
+		Circleresult = c2CircletoAABB(c2circle_collider, aabb_mouse);
+		cout << ((AABBresult != 0) ? ("Collision") : "") << endl;
+		cout << ((Circleresult != 0) ? ("Collision") : "") << endl;
+		if (AABBresult)
 		{
 			mouseRectangle.setOutlineColor(sf::Color::Red);
 			playerRectangle.setOutlineColor(sf::Color::Red);
@@ -130,6 +142,15 @@ int main()
 			playerRectangle.setOutlineColor(sf::Color::Green);
 		}
 
+		if (Circleresult)
+		{
+			mouseRectangle.setOutlineColor(sf::Color::Red);
+		}
+		else
+		{
+			mouseRectangle.setOutlineColor(sf::Color::Green);
+		}
+
 		// Clear screen
 		window.clear();
 
@@ -138,6 +159,7 @@ int main()
 		window.draw(mouse);
 		window.draw(playerRectangle);
 		window.draw(mouseRectangle);
+		window.draw(circle);
 		// Update the window
 		window.display();
 	}
