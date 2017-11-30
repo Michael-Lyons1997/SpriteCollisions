@@ -65,6 +65,7 @@ int main()
 	animated_sprite.addFrame(sf::IntRect(258, 3, 84, 84));
 	animated_sprite.addFrame(sf::IntRect(343, 3, 84, 84));
 	animated_sprite.addFrame(sf::IntRect(428, 3, 84, 84));
+	animated_sprite.addFrame(sf::IntRect(3, 88, 84, 84));
 
 	// Setup Players AABB
 	c2AABB aabb_player;
