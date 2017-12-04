@@ -65,13 +65,12 @@ int main()
 	animated_sprite.addFrame(sf::IntRect(258, 3, 84, 84));
 	animated_sprite.addFrame(sf::IntRect(343, 3, 84, 84));
 	animated_sprite.addFrame(sf::IntRect(428, 3, 84, 84));
-	animated_sprite.addFrame(sf::IntRect(3, 88, 84, 84));
 
 	// Setup Players AABB
 	c2AABB aabb_player;
 	aabb_player.min = c2V(animated_sprite.getPosition().x, animated_sprite.getPosition().y);
 	aabb_player.max = c2V(animated_sprite.getGlobalBounds().width / animated_sprite.getFrames().size(), 
-		animated_sprite.getGlobalBounds().height / animated_sprite.getFrames().size());
+		 animated_sprite.getGlobalBounds().height / animated_sprite.getFrames().size());
 	
 	
 	//setup circle collider
@@ -106,7 +105,7 @@ int main()
 		}
 		// Update mouse AABB
 		aabb_mouse.min = c2V(mouse.getPosition().x, mouse.getPosition().y);
-		aabb_mouse.max = c2V(mouse.getGlobalBounds().width, mouse.getGlobalBounds().width);
+		aabb_mouse.max = c2V(mouse.getPosition().x + mouse.getGlobalBounds().width, mouse.getPosition().y + mouse.getGlobalBounds().width);
 		circleMouseCollider.p = c2V(mouse.getPosition().x, mouse.getPosition().y);
 
 		// Process events
